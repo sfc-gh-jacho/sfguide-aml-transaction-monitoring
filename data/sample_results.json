@@ -1,0 +1,525 @@
+{
+  "_note": "Captured from a real end-to-end run of sql/aml_transaction_monitoring.sql on synthetic data. Customers are IDs only; countries are coded. Rules, thresholds and scores are illustrative, not regulatory guidance. AI summaries vary by model and run.",
+  "totals": {
+    "transactions": 500053
+  },
+  "ledger": [
+    {
+      "txn_id": 137737,
+      "time": "2026-10-18 00:19",
+      "type": "ACH_CREDIT",
+      "direction": "IN",
+      "amount": 675.45,
+      "counterparty": "EMPLOYER_027"
+    },
+    {
+      "txn_id": 409027,
+      "time": "2026-10-18 06:29",
+      "type": "ACH_CREDIT",
+      "direction": "IN",
+      "amount": 2449.31,
+      "counterparty": "EMPLOYER_028"
+    },
+    {
+      "txn_id": 48502,
+      "time": "2026-10-19 21:20",
+      "type": "CARD_PURCHASE",
+      "direction": "OUT",
+      "amount": 205.88,
+      "counterparty": "MERCHANT_058"
+    },
+    {
+      "txn_id": 256549,
+      "time": "2026-10-19 22:02",
+      "type": "CARD_PURCHASE",
+      "direction": "OUT",
+      "amount": 80.26,
+      "counterparty": "MERCHANT_380"
+    },
+    {
+      "txn_id": 900021,
+      "time": "2026-10-20 09:10",
+      "type": "CASH_DEPOSIT",
+      "direction": "IN",
+      "amount": 9990.0,
+      "counterparty": "BRANCH_05"
+    },
+    {
+      "txn_id": 410103,
+      "time": "2026-10-20 20:08",
+      "type": "ACH_DEBIT",
+      "direction": "OUT",
+      "amount": 1140.68,
+      "counterparty": "BILLER_56"
+    },
+    {
+      "txn_id": 274900,
+      "time": "2026-10-21 00:40",
+      "type": "CARD_PURCHASE",
+      "direction": "OUT",
+      "amount": 438.56,
+      "counterparty": "MERCHANT_238"
+    },
+    {
+      "txn_id": 900022,
+      "time": "2026-10-21 09:15",
+      "type": "CASH_DEPOSIT",
+      "direction": "IN",
+      "amount": 9975.0,
+      "counterparty": "BRANCH_05"
+    },
+    {
+      "txn_id": 303972,
+      "time": "2026-10-21 17:43",
+      "type": "CARD_PURCHASE",
+      "direction": "OUT",
+      "amount": 132.37,
+      "counterparty": "MERCHANT_374"
+    },
+    {
+      "txn_id": 900023,
+      "time": "2026-10-22 09:05",
+      "type": "CASH_DEPOSIT",
+      "direction": "IN",
+      "amount": 9980.0,
+      "counterparty": "BRANCH_06"
+    },
+    {
+      "txn_id": 219034,
+      "time": "2026-10-22 15:31",
+      "type": "ACH_DEBIT",
+      "direction": "OUT",
+      "amount": 498.15,
+      "counterparty": "BILLER_47"
+    },
+    {
+      "txn_id": 157733,
+      "time": "2026-10-23 00:25",
+      "type": "ACH_CREDIT",
+      "direction": "IN",
+      "amount": 2262.76,
+      "counterparty": "EMPLOYER_101"
+    },
+    {
+      "txn_id": 900024,
+      "time": "2026-10-23 09:20",
+      "type": "CASH_DEPOSIT",
+      "direction": "IN",
+      "amount": 9995.0,
+      "counterparty": "BRANCH_05"
+    },
+    {
+      "txn_id": 900025,
+      "time": "2026-10-24 09:00",
+      "type": "CASH_DEPOSIT",
+      "direction": "IN",
+      "amount": 9960.0,
+      "counterparty": "BRANCH_06"
+    },
+    {
+      "txn_id": 284543,
+      "time": "2026-10-24 15:36",
+      "type": "ACH_DEBIT",
+      "direction": "OUT",
+      "amount": 1885.02,
+      "counterparty": "BILLER_07"
+    },
+    {
+      "txn_id": 268725,
+      "time": "2026-10-24 22:26",
+      "type": "CASH_DEPOSIT",
+      "direction": "IN",
+      "amount": 3604.65,
+      "counterparty": "BRANCH_00"
+    },
+    {
+      "txn_id": 472792,
+      "time": "2026-10-25 14:35",
+      "type": "CARD_PURCHASE",
+      "direction": "OUT",
+      "amount": 61.11,
+      "counterparty": "MERCHANT_055"
+    },
+    {
+      "txn_id": 163601,
+      "time": "2026-10-26 00:25",
+      "type": "CARD_PURCHASE",
+      "direction": "OUT",
+      "amount": 24.53,
+      "counterparty": "MERCHANT_158"
+    },
+    {
+      "txn_id": 338242,
+      "time": "2026-10-26 03:08",
+      "type": "ACH_CREDIT",
+      "direction": "IN",
+      "amount": 2004.02,
+      "counterparty": "EMPLOYER_062"
+    },
+    {
+      "txn_id": 28703,
+      "time": "2026-10-26 15:30",
+      "type": "ACH_DEBIT",
+      "direction": "OUT",
+      "amount": 1095.64,
+      "counterparty": "BILLER_64"
+    }
+  ],
+  "queue": [
+    {
+      "alert_id": "RPD-002",
+      "rule": "RAPID_MOVEMENT",
+      "risk_score": 92,
+      "customer": "C0333",
+      "kyc_risk": "HIGH",
+      "region": "EAST",
+      "date": "2026-09-03",
+      "explanation": "$185,000 wired in from CTRY_C, then $182,500 (99%) wired out in 31 hours across 1 wire(s)"
+    },
+    {
+      "alert_id": "RPD-001",
+      "rule": "RAPID_MOVEMENT",
+      "risk_score": 85,
+      "customer": "C0555",
+      "kyc_risk": "MEDIUM",
+      "region": "EAST",
+      "date": "2026-08-18",
+      "explanation": "$250,000 wired in from CTRY_G, then $245,000 (98%) wired out in 39 hours across 2 wire(s)"
+    },
+    {
+      "alert_id": "FNL-002",
+      "rule": "FUNNEL_ACCOUNT",
+      "risk_score": 73,
+      "customer": "C1888",
+      "kyc_risk": "HIGH",
+      "region": "WEST",
+      "date": "2026-10-18",
+      "explanation": "14 different senders wired $84,693 in 6 days, then $64,900 left in a single wire"
+    },
+    {
+      "alert_id": "FNL-001",
+      "rule": "FUNNEL_ACCOUNT",
+      "risk_score": 67,
+      "customer": "C0777",
+      "kyc_risk": "MEDIUM",
+      "region": "EAST",
+      "date": "2026-09-08",
+      "explanation": "15 different senders wired $113,211 in 6 days, then $87,350 left in a single wire"
+    },
+    {
+      "alert_id": "GEO-002",
+      "rule": "HIGH_RISK_GEO",
+      "risk_score": 54,
+      "customer": "C1616",
+      "kyc_risk": "LOW",
+      "region": "WEST",
+      "date": "2026-10-02",
+      "explanation": "Round-amount wire of $120,000 to CTRY_L (risk tier HIGH)"
+    },
+    {
+      "alert_id": "RPD-003",
+      "rule": "RAPID_MOVEMENT",
+      "risk_score": 53,
+      "customer": "C1444",
+      "kyc_risk": "LOW",
+      "region": "WEST",
+      "date": "2026-10-11",
+      "explanation": "$92,000 wired in from CTRY_B, then $90,100 (98%) wired out in 20 hours across 1 wire(s)"
+    },
+    {
+      "alert_id": "GEO-001",
+      "rule": "HIGH_RISK_GEO",
+      "risk_score": 50,
+      "customer": "C0909",
+      "kyc_risk": "MEDIUM",
+      "region": "EAST",
+      "date": "2026-09-22",
+      "explanation": "Round-amount wire of $50,000 to CTRY_J (risk tier HIGH)"
+    },
+    {
+      "alert_id": "STR-004",
+      "rule": "STRUCTURING",
+      "risk_score": 50,
+      "customer": "C1203",
+      "kyc_risk": "LOW",
+      "region": "EAST",
+      "date": "2026-10-20",
+      "explanation": "5 cash deposits between $9,000 and $10,000 within 4 days, totalling $49,900"
+    },
+    {
+      "alert_id": "STR-003",
+      "rule": "STRUCTURING",
+      "risk_score": 48,
+      "customer": "C0101",
+      "kyc_risk": "LOW",
+      "region": "EAST",
+      "date": "2026-10-05",
+      "explanation": "4 cash deposits between $9,000 and $10,000 within 4 days, totalling $38,900"
+    },
+    {
+      "alert_id": "STR-001",
+      "rule": "STRUCTURING",
+      "risk_score": 46,
+      "customer": "C0404",
+      "kyc_risk": "LOW",
+      "region": "WEST",
+      "date": "2026-08-25",
+      "explanation": "3 cash deposits between $9,000 and $10,000 within 5 days, totalling $28,250"
+    },
+    {
+      "alert_id": "STR-002",
+      "rule": "STRUCTURING",
+      "risk_score": 46,
+      "customer": "C0502",
+      "kyc_risk": "LOW",
+      "region": "WEST",
+      "date": "2026-09-14",
+      "explanation": "3 cash deposits between $9,000 and $10,000 within 4 days, totalling $28,900"
+    },
+    {
+      "alert_id": "GEO-003",
+      "rule": "HIGH_RISK_GEO",
+      "risk_score": 36,
+      "customer": "C0121",
+      "kyc_risk": "LOW",
+      "region": "EAST",
+      "date": "2026-10-15",
+      "explanation": "Round-amount wire of $30,000 to CTRY_K (risk tier HIGH)"
+    }
+  ],
+  "noise": [
+    {
+      "rule": "STRUCTURING",
+      "scanned": 500053,
+      "alerts": 4
+    },
+    {
+      "rule": "HIGH_RISK_GEO",
+      "scanned": 500053,
+      "alerts": 3
+    },
+    {
+      "rule": "RAPID_MOVEMENT",
+      "scanned": 500053,
+      "alerts": 3
+    },
+    {
+      "rule": "FUNNEL_ACCOUNT",
+      "scanned": 500053,
+      "alerts": 2
+    }
+  ],
+  "case": [
+    {
+      "time": "2026-10-19 21:20",
+      "type": "CARD_PURCHASE",
+      "direction": "OUT",
+      "amount": 205.88,
+      "counterparty": "MERCHANT_058",
+      "flag": ""
+    },
+    {
+      "time": "2026-10-19 22:02",
+      "type": "CARD_PURCHASE",
+      "direction": "OUT",
+      "amount": 80.26,
+      "counterparty": "MERCHANT_380",
+      "flag": ""
+    },
+    {
+      "time": "2026-10-20 09:10",
+      "type": "CASH_DEPOSIT",
+      "direction": "IN",
+      "amount": 9990.0,
+      "counterparty": "BRANCH_05",
+      "flag": "NEAR THRESHOLD"
+    },
+    {
+      "time": "2026-10-20 20:08",
+      "type": "ACH_DEBIT",
+      "direction": "OUT",
+      "amount": 1140.68,
+      "counterparty": "BILLER_56",
+      "flag": ""
+    },
+    {
+      "time": "2026-10-21 00:40",
+      "type": "CARD_PURCHASE",
+      "direction": "OUT",
+      "amount": 438.56,
+      "counterparty": "MERCHANT_238",
+      "flag": ""
+    },
+    {
+      "time": "2026-10-21 09:15",
+      "type": "CASH_DEPOSIT",
+      "direction": "IN",
+      "amount": 9975.0,
+      "counterparty": "BRANCH_05",
+      "flag": "NEAR THRESHOLD"
+    },
+    {
+      "time": "2026-10-21 17:43",
+      "type": "CARD_PURCHASE",
+      "direction": "OUT",
+      "amount": 132.37,
+      "counterparty": "MERCHANT_374",
+      "flag": ""
+    },
+    {
+      "time": "2026-10-22 09:05",
+      "type": "CASH_DEPOSIT",
+      "direction": "IN",
+      "amount": 9980.0,
+      "counterparty": "BRANCH_06",
+      "flag": "NEAR THRESHOLD"
+    },
+    {
+      "time": "2026-10-22 15:31",
+      "type": "ACH_DEBIT",
+      "direction": "OUT",
+      "amount": 498.15,
+      "counterparty": "BILLER_47",
+      "flag": ""
+    },
+    {
+      "time": "2026-10-23 00:25",
+      "type": "ACH_CREDIT",
+      "direction": "IN",
+      "amount": 2262.76,
+      "counterparty": "EMPLOYER_101",
+      "flag": ""
+    },
+    {
+      "time": "2026-10-23 09:20",
+      "type": "CASH_DEPOSIT",
+      "direction": "IN",
+      "amount": 9995.0,
+      "counterparty": "BRANCH_05",
+      "flag": "NEAR THRESHOLD"
+    },
+    {
+      "time": "2026-10-24 09:00",
+      "type": "CASH_DEPOSIT",
+      "direction": "IN",
+      "amount": 9960.0,
+      "counterparty": "BRANCH_06",
+      "flag": "NEAR THRESHOLD"
+    },
+    {
+      "time": "2026-10-24 15:36",
+      "type": "ACH_DEBIT",
+      "direction": "OUT",
+      "amount": 1885.02,
+      "counterparty": "BILLER_07",
+      "flag": ""
+    },
+    {
+      "time": "2026-10-24 22:26",
+      "type": "CASH_DEPOSIT",
+      "direction": "IN",
+      "amount": 3604.65,
+      "counterparty": "BRANCH_00",
+      "flag": ""
+    },
+    {
+      "time": "2026-10-25 14:35",
+      "type": "CARD_PURCHASE",
+      "direction": "OUT",
+      "amount": 61.11,
+      "counterparty": "MERCHANT_055",
+      "flag": ""
+    },
+    {
+      "time": "2026-10-26 00:25",
+      "type": "CARD_PURCHASE",
+      "direction": "OUT",
+      "amount": 24.53,
+      "counterparty": "MERCHANT_158",
+      "flag": ""
+    },
+    {
+      "time": "2026-10-26 03:08",
+      "type": "ACH_CREDIT",
+      "direction": "IN",
+      "amount": 2004.02,
+      "counterparty": "EMPLOYER_062",
+      "flag": ""
+    }
+  ],
+  "dynamic": {
+    "before": {
+      "STRUCTURING": 4,
+      "HIGH_RISK_GEO": 3,
+      "RAPID_MOVEMENT": 3,
+      "FUNNEL_ACCOUNT": 2
+    },
+    "after": {
+      "FUNNEL_ACCOUNT": 2,
+      "HIGH_RISK_GEO": 3,
+      "RAPID_MOVEMENT": 3,
+      "STRUCTURING": 5
+    },
+    "history": [
+      {
+        "state": "SUCCEEDED",
+        "action": "FULL",
+        "trigger": "MANUAL"
+      },
+      {
+        "state": "SUCCEEDED",
+        "action": "FULL",
+        "trigger": "CREATION"
+      }
+    ]
+  },
+  "access": [
+    {
+      "role": "AML_INVESTIGATOR_EAST",
+      "alerts": 7,
+      "regions": "EAST"
+    },
+    {
+      "role": "AML_INVESTIGATOR_WEST",
+      "alerts": 6,
+      "regions": "WEST"
+    },
+    {
+      "role": "AML_MANAGER",
+      "alerts": 13,
+      "regions": "EAST,WEST"
+    }
+  ],
+  "ai": [
+    {
+      "alert_id": "RPD-002",
+      "rule": "RAPID_MOVEMENT",
+      "risk_score": 92,
+      "summary": "A customer, identified as C0333, had $185,000 wired into their account, A0333, from CTRY_C, and then $182,500 was wired out within 31 hours, which triggered the RAPID_MOVEMENT rule due to the quick turnaround of a large amount of funds. This transaction pattern matched the rule because nearly the entire amount deposited was rapidly moved out of the account, resulting in a high risk score of 92. The investigator should review the customer's Know Your Customer (KYC) information and transaction history, considering the HIGH kyc_risk associated with this retail segment customer, to understand the context and legitimacy of these transactions."
+    },
+    {
+      "alert_id": "RPD-001",
+      "rule": "RAPID_MOVEMENT",
+      "risk_score": 85,
+      "summary": "A customer, identified as C0555, had $250,000 wired into their account, A2555, from CTRY_G, and then $245,000, which is 98% of the initial amount, was wired out within 39 hours across two transactions. This activity triggered the RAPID_MOVEMENT rule, which flags transactions that involve a high percentage of funds being moved quickly, due to the rapid outflow of funds. The investigator should review the details of these transactions, considering the customer's medium KYC risk and retail segment, as well as the high risk score of 85, to determine the next steps in the investigation."
+    },
+    {
+      "alert_id": "FNL-002",
+      "rule": "FUNNEL_ACCOUNT",
+      "risk_score": 73,
+      "summary": "A customer, identified as C1888, had 14 different senders wire a total of $84,693 into their account, A1888, over a period of 6 days, followed by a single wire transfer of $64,900 out of the account. This activity triggered the FUNNEL_ACCOUNT rule, which was matched due to the high volume of incoming wires from multiple sources, followed by a large outgoing wire, resulting in a risk score of 73. The investigator should review the customer's Know Your Customer (KYC) information, which is flagged as HIGH risk, to determine the legitimacy of the transactions and assess the overall risk associated with account A1888."
+    },
+    {
+      "alert_id": "FNL-001",
+      "rule": "FUNNEL_ACCOUNT",
+      "risk_score": 67,
+      "summary": "A customer, identified as C0777, had $113,211 wired into their account, A0777, from 15 different senders over a period of 6 days, followed by a single wire transfer of $87,350 out of the account. This activity triggered the FUNNEL_ACCOUNT rule, which is indicated by a risk score of 67, suggesting that the account may be being used to funnel funds, and is consistent with the customer's medium KYC risk profile. The investigator should review the customer's account history and transaction records to understand the purpose and legitimacy of these transactions, particularly given the customer's retail segment classification and the large amounts involved."
+    },
+    {
+      "alert_id": "GEO-002",
+      "rule": "HIGH_RISK_GEO",
+      "risk_score": 54,
+      "summary": "A wire transfer of $120,000 was made from account A1616, held by customer C1616, a retail segment customer with a low KYC risk, to a country designated as CTRY_L, which has a high risk tier. This transaction triggered the HIGH_RISK_GEO rule due to the destination country's high risk classification, resulting in a risk score of 54. The investigator should review the details of this transaction, including the purpose and recipient of the wire transfer, to further assess the risk and determine the next course of action."
+    }
+  ]
+}

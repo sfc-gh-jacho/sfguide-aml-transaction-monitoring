@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AML Transaction Monitoring in Snowflake — Snowflake Demo Packs</title>
+  <meta name="description" content="Explainable anti-money-laundering detection in SQL: structuring, rapid movement, funnel accounts and high-risk geography, with risk scoring, Dynamic Tables, row access and Cortex case summaries." />
+  <link rel="stylesheet" href="vendor/prism/prism-tomorrow.min.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <!-- ────── Nav ────── -->
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a href="#" class="nav-brand">
+        <div class="nav-logo"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+        AML Monitoring
+      </a>
+      <button class="nav-hamburger" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" role="list">
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#structuring">Rules</a></li>
+        <li><a href="#scoring">Alert Queue</a></li>
+        <li><a href="#access">Investigators</a></li>
+        <li><a href="#ai">AI Summaries</a></li>
+        <li><a href="#conclusion">Wrap-up</a></li>
+        <li><a href="https://sfc-gh-jacho.github.io/Demo-Packs/">All Demo Packs</a></li>
+        <li><a href="https://github.com/sfc-gh-jacho/sfguide-aml-transaction-monitoring">GitHub</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ────── Hero ────── -->
+  <header class="hero" id="hero">
+    <div class="container">
+      <div class="hero-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Financial Services · Financial Crime
+      </div>
+      <h1>AML Transaction Monitoring in <span>Snowflake</span></h1>
+      <p>Transparent, explainable money-laundering detection in SQL: a prioritized alert queue, region-based investigator access and AI-drafted case summaries.</p>
+      <div class="hero-ctas">
+        <a href="#overview" class="btn btn-primary">Start the Guide</a>
+        <a href="sql/aml_transaction_monitoring.sql" class="btn btn-ghost" download>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download Full SQL
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="hero-stat-val">~25 min</div><div class="hero-stat-label">Time to Complete</div></div>
+        <div class="hero-stat"><div class="hero-stat-val">500K</div><div class="hero-stat-label">Transactions Scanned</div></div>
+        <div class="hero-stat"><div class="hero-stat-val">4</div><div class="hero-stat-label">Typology Rules</div></div>
+        <div class="hero-stat"><div class="hero-stat-val">12</div><div class="hero-stat-label">Planted Cases Found*</div></div>
+      </div>
+      <p class="hero-footnote">* All 12 alerts are cases deliberately planted in synthetic data. This shows how the rules work. It is not a detection-rate or false-positive claim, and the rules are not regulatory guidance.</p>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- ────── Overview ────── -->
+    <section id="overview">
+      <div class="container">
+        <div class="section-header reveal">
+          <div class="section-label">Overview</div>
+          <h2>From Half a Million Transactions to a Dozen Cases</h2>
+          <p>A financial-crime team at a fictional bank reviews 90 days of activity: 500,000 transactions across 3,000 accounts. A dozen of them form classic money-laundering patterns. Here you build transparent rules that find them, score them and route each one to the right investigator.</p>
+        </div>
+        <div class="pipeline reveal">
+          <div class="pipeline-card">
+            <div class="pipeline-step grad-1">A</div>
+            <h3>Structuring</h3>
+            <p>Cash split into deposits just under a reporting threshold to avoid a report.</p>
+          </div>
+          <div class="pipeline-card">
+            <div class="pipeline-step grad-2">B</div>
+            <h3>Rapid movement</h3>
+            <p>Large wires in, then nearly all of it out again within 48 hours. The account is a pass-through.</p>
+          </div>
+          <div class="pipeline-card">
+            <div class="pipeline-step grad-3">C</div>
+            <h3>Funnel account</h3>
+            <p>Many unrelated senders pay in, and the money leaves together in one large wire.</p>
+          </div>
+          <div class="pipeline-card">
+            <div class="pipeline-step grad-4">D</div>
+            <h3>High-risk geography</h3>
+            <p>Round-amount wires to destinations in a high-risk country tier.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ────── Prerequisites ────── -->
+    <section id="prereqs" class="bg-alt">
+      <div class="container narrow">
+        <div class="section-header reveal">
+          <div class="section-label">Prerequisites</div>
+          <h2>Before You Begin</h2>
+        </div>
+        <ul class="checklist reveal">
+          <li><strong>Enterprise Edition or higher</strong> for the row access policy (Step 11). The detection rules and Dynamic Table work on any edition.</li>
+          <li><strong>Cortex AI functions</strong> for the optional Step 12. The script uses <code>llama3.3-70b</code>. If it isn't available in your region, swap in another model or enable cross-region inference.</li>
+          <li><strong>A role to run it.</strong> ACCOUNTADMIN is simplest in a sandbox. For regulated environments, the top of Step 1 includes a <strong>least-privilege option</strong>: an administrator creates <code>AML_DEMO_ROLE</code> once with only CREATE DATABASE, CREATE WAREHOUSE, CREATE ROLE and the <code>SNOWFLAKE.CORTEX_USER</code> database role. You then set <code>demo_role</code> to that role on the first line of the script.</li>
+          <li><strong>One Snowsight worksheet, run top to bottom.</strong> The script creates its own <code>AML_DEMO_DB</code> and <code>AML_WH</code> and changes nothing else.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ────── Steps ────── -->
+    <section id="setup">
+      <div class="container narrow">
+        <div class="step reveal">
+          <div class="step-head"><div class="deploy-num">1</div><div><div class="section-label">Step 1</div><h2>Setup</h2></div></div>
+          <p>Choose the role that runs the demo, then create a dedicated database and an XSMALL warehouse that suspends after 60 seconds idle. Everything the guide builds lives inside these objects.</p>
+          <div class="code-wrap" data-step="setup"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="reference" class="bg-alt">
+      <div class="container narrow">
+        <div class="step reveal">
+          <div class="step-head"><div class="deploy-num">2</div><div><div class="section-label">Step 2</div><h2>Settings, Countries, Customers and Accounts</h2></div></div>
+          <p>Rule thresholds live in an <code>AML_SETTINGS</code> table, so analysts can tune them without editing code. The reporting threshold is jurisdiction-specific, so set your own. Customers are IDs only, each with a KYC risk rating and a region. Countries are coded <code>CTRY_A</code>–<code>CTRY_L</code> so no real jurisdiction is labeled high risk.</p>
+          <div class="code-wrap" data-step="reference"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="transactions">
+      <div class="container narrow">
+        <div class="step reveal">
+          <div class="step-head"><div class="deploy-num">3</div><div><div class="section-label">Step 3</div><h2>90 Days of Transactions</h2></div></div>
+          <p>This step generates 500,000 card, cash, ACH and wire transactions deterministically. Normal activity is deliberately clean: cash deposits stay under $4,000, wires are at most $20,000, and international wires only go to low- or medium-risk countries. Any alert later therefore traces back to a planted case.</p>
+          <div class="code-wrap" data-step="transactions"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="plant" class="bg-alt">
+      <div class="container narrow">
+        <div class="step reveal">
+          <div class="step-head"><div class="deploy-num">4</div><div><div class="section-label">Step 4</div><h2>Plant the Typologies</h2></div></div>
+          <p>Twelve cases are hidden among the normal activity: four structuring, three rapid-movement, two funnel accounts and three high-risk-geography wires. Below is ten days of one account with no monitoring in place. The structuring is there, but it's easy to miss among everyday spending.</p>
+          <div class="code-wrap" data-step="plant"></div>
+          <h3 class="table-title">Before: account A1203, Oct 17–27 <span class="real-badge">Real run output</span></h3>
+          <div class="results" data-results="ledger"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="structuring">
+      <div class="container narrow">
+        <div class="step reveal">
+          <div class="step-head"><div class="deploy-num">5</div><div><div class="section-label">Step 5 · Rule A</div><h2>Structuring</h2></div></div>
+          <p>The rule finds three or more cash deposits within 7 days, each within 10% below the reporting threshold. A self-join over a 7-day window counts the near-threshold deposits, and <code>QUALIFY</code> keeps the strongest window per account. The threshold and band come from the settings table.</p>
+          <div class="code-wrap" data-step="structuring"></div>
+          <h3 class="table-title">Alerts found <span class="real-badge">Real run output</span></h3>
+          <div class="results" data-results="rule" data-rule="STRUCTURING"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="rapid" class="bg-alt">
+      <div class="container narrow">
+        <div class="step reveal">
+          <div class="step-head"><div class="deploy-num">6</div><div><div class="section-label">Step 6 · Rule B</div><h2>Rapid Movement of Funds</h2></div></div>
+          <p>For every large incoming wire, the rule sums the outgoing wires in the next 48 hours. If at least 90% of the money left again, the account behaves like a pass-through. Each explanation gives the amounts, the percentage and how many hours it took.</p>
+          <div class="code-wrap" data-step="rapid"></div>
+          <h3 class="table-title">Alerts found <span class="real-badge">Real run output</span></h3>
+          <div class="results" data-results="rule" data-rule="RAPID_MOVEMENT"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="funnel">
+      <div class="container narrow">
+        <div class="step reveal">
+          <div class="step-head"><div class="deploy-num">7</div><div><div class="section-label">Step 7 · Rule C</div><h2>Funnel Accounts</h2></div></div>
+          <p>The rule looks back 7 days from every wire out of $25,000 or more. It flags the wire when ten or more different senders paid in at least $50,000 and a single outbound wire moved at least half of it on.</p>
+          <div class="code-wrap" data-step="funnel"></div>
+          <h3 class="table-title">Alerts found <span class="real-badge">Real run output</span></h3>
+          <div class="results" data-results="rule" data-rule="FUNNEL_ACCOUNT"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="geo" class="bg-alt">
+      <div class="container narrow">
+        <div class="step reveal">
+          <div class="step-head"><div class="deploy-num">8</div><div><div class="section-label">Step 8 · Rule D</div><h2>High-risk Geography</h2></div></div>
+          <p>This is the simplest rule: wires of $10,000 or more, in round thousands, to a country in the high-risk tier. On its own it's a weak signal. Combined with KYC risk in the scoring step, it helps prioritize.</p>
+          <div class="code-wrap" data-step="geo"></div>
+          <h3 class="table-title">Alerts found <span class="real-badge">Real run output</span></h3>
+          <div class="results" data-results="rule" data-rule="HIGH_RISK_GEO"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="scoring">
+      <div class="container narrow">
+        <div class="step reveal">
+          <div class="step-head"><div class="deploy-num">9</div><div><div class="section-label">Step 9</div><h2>Risk Scoring and a Live Alert Queue</h2></div></div>
+          <p>Each alert gets a 0–100 score: the rule's weight, plus the customer's KYC risk, plus the size of the money involved. The queue is a <strong>Dynamic Table</strong>, so it refreshes itself within a minute of new transactions landing. The script then adds a new structuring pattern, which appears after the next refresh.</p>
+          <div class="callout"><strong>Not a performance claim.</strong> The 12 alerts are the 12 cases deliberately planted in synthetic data, and normal activity was generated so it can't trip any rule. On real data these rules will produce false positives and need tuning, backtesting and model validation, as any monitoring program does.</div>
+          <div class="code-wrap" data-step="scoring"></div>
+          <h3 class="table-title">Signal vs. noise <span class="real-badge">Real run output</span></h3>
+          <div class="results" data-results="funnel"></div>
+          <h3 class="table-title">After: the prioritized alert queue <span class="real-badge">Real run output</span></h3>
+          <div class="results" data-results="queue"></div>
+          <h3 class="table-title">New activity arrives <span class="real-badge">Real run output</span></h3>
+          <div class="results" data-results="dynamic"></div>
+          <p class="legend">Both refreshes were FULL rather than incremental, because the rules use self-joins and window functions.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="investigate" class="bg-alt">
+      <div class="container narrow">
+        <div class="step reveal">
+          <div class="step-head"><div class="deploy-num">10</div><div><div class="section-label">Step 10</div><h2>Investigate One Case</h2></div></div>
+          <p>An alert has to be verifiable. This query takes the top structuring alert and shows every transaction on the account around that window. Five deposits between $9,960 and $9,995, on five consecutive mornings, stand out against ordinary card and bill activity.</p>
+          <div class="code-wrap" data-step="investigate"></div>
+          <h3 class="table-title">Case STR-004: account activity <span class="real-badge">Real run output</span></h3>
+          <div class="results" data-results="case"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="access">
+      <div class="container narrow">
+        <div class="step reveal">
+          <div class="step-head"><div class="deploy-num">11</div><div><div class="section-label">Step 11 · Enterprise</div><h2>Region-based Investigator Access</h2></div></div>
+          <p>A row access policy on the alert queue reads a <strong>mapping table</strong> of role to region. East and West investigators see only their own customers, and the manager sees both. Adding an investigator or a region is an <code>INSERT</code>, not a policy rewrite.</p>
+          <div class="code-wrap" data-step="access"></div>
+          <h3 class="table-title">Alerts visible per role <span class="real-badge">Real run output</span></h3>
+          <div class="results" data-results="access"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="ai" class="bg-alt">
+      <div class="container narrow">
+        <div class="step reveal">
+          <div class="step-head"><div class="deploy-num">12</div><div><div class="section-label">Step 12 · Optional · Cortex AI</div><h2>AI-drafted Case Summaries</h2></div></div>
+          <p><code>AI_COMPLETE</code> drafts a neutral, three-sentence case summary for each of the five highest-risk alerts, using only the facts in the alert. The prompt tells the model not to speculate, not to conclude a crime occurred and not to invent names. An investigator reviews and edits the draft. The model doesn't make the decision.</p>
+          <div class="callout">AI output varies by model and run. The summaries below are one captured example, shown as illustrative. Running this step on five alerts uses only a few thousand tokens.</div>
+          <div class="code-wrap" data-step="ai"></div>
+          <h3 class="table-title">Draft summaries next to the facts behind them <span class="illustrative">Illustrative</span></h3>
+          <div class="results" data-results="ai"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="cleanup">
+      <div class="container narrow">
+        <div class="step reveal">
+          <div class="step-head"><div class="deploy-num">13</div><div><div class="section-label">Step 13</div><h2>Clean Up</h2></div></div>
+          <p>Uncomment and run this block. Dropping the database removes the tables, views, Dynamic Table, row access policy and AI summaries together. The warehouse and investigator roles are dropped separately. The Dynamic Table is already suspended at the end of Step 12.</p>
+          <div class="code-wrap" data-step="cleanup"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ────── Conclusion ────── -->
+    <section id="conclusion" class="bg-alt">
+      <div class="container">
+        <div class="section-header reveal">
+          <div class="section-label">Wrap-up</div>
+          <h2>Key Takeaways</h2>
+          <p>You built four AML typology rules, a scored and self-refreshing alert queue, region-based investigator access and AI-assisted case drafting, all inside Snowflake.</p>
+        </div>
+        <div class="cortex-grid reveal">
+          <div class="cortex-card"><h3>Transparent rules</h3><p>Every rule is readable SQL, and every alert explains in plain English why it fired. That makes it easy to review, tune and defend.</p></div>
+          <div class="cortex-card"><h3>Tunable without code</h3><p>Thresholds live in a settings table, so analysts change them with an UPDATE, not a deployment.</p></div>
+          <div class="cortex-card"><h3>Always current</h3><p>A Dynamic Table re-scores alerts within a minute of new transactions, with no orchestration to maintain.</p></div>
+          <div class="cortex-card"><h3>AI assists, people decide</h3><p>Cortex drafts case summaries from the alert's facts, and investigators review and own the outcome.</p></div>
+        </div>
+        <div class="doc-links reveal">
+          <h3>Learn more in the Snowflake documentation</h3>
+          <div class="doc-grid">
+            <a href="https://docs.snowflake.com/en/user-guide/dynamic-tables-about" target="_blank" rel="noopener">Dynamic Tables →</a>
+            <a href="https://docs.snowflake.com/en/user-guide/security-row-intro" target="_blank" rel="noopener">Row Access Policies →</a>
+            <a href="https://docs.snowflake.com/en/sql-reference/functions/ai_complete" target="_blank" rel="noopener">AI_COMPLETE →</a>
+            <a href="https://docs.snowflake.com/en/sql-reference/constructs/qualify" target="_blank" rel="noopener">QUALIFY →</a>
+            <a href="https://docs.snowflake.com/en/sql-reference/functions-analytic" target="_blank" rel="noopener">Window Functions →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ────── Footer ────── -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-col">
+          <h4>Guide</h4>
+          <a href="#overview">Overview</a>
+          <a href="#structuring">Detection Rules</a>
+          <a href="#scoring">Alert Queue</a>
+          <a href="#ai">AI Summaries</a>
+        </div>
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <a href="sql/aml_transaction_monitoring.sql" download>Download SQL</a>
+          <a href="https://github.com/sfc-gh-jacho/sfguide-aml-transaction-monitoring">GitHub Repository</a>
+          <a href="https://sfc-gh-jacho.github.io/Demo-Packs/">All Demo Packs</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-disclaimer">Code licensed under <a href="https://github.com/sfc-gh-jacho/sfguide-aml-transaction-monitoring/blob/main/LICENSE">Apache 2.0</a>. All customers, accounts, countries and transactions are synthetic. Rules, thresholds and scores are illustrative and educational. They are not BSA/AML, FinCEN or any other regulatory guidance, and not a production monitoring system. This site has no connection to any Snowflake account.</p>
+        <span class="snow-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="2" x2="12" y2="22"/><line x1="3.3" y1="7" x2="20.7" y2="17"/><line x1="3.3" y1="17" x2="20.7" y2="7"/></svg>
+          Built on Snowflake Horizon
+        </span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="vendor/prism/prism.min.js"></script>
+  <script src="vendor/prism/prism-sql.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
