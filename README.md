@@ -39,7 +39,7 @@ GRANT ROLE AML_DEMO_ROLE TO USER <YOUR_USER>;
 
 Then change the first line to `SET demo_role = 'AML_DEMO_ROLE';`. The role owns everything it creates, and the investigator roles are granted to it. This path was tested end to end and produced identical results.
 
-## Run the demo in Snowsight
+## Run the example in Snowsight
 
 1. Download [`sql/aml_transaction_monitoring.sql`](sql/aml_transaction_monitoring.sql).
 2. In Snowsight, open **Projects → Worksheets** and create a new SQL worksheet.
@@ -67,6 +67,19 @@ A full run takes a few minutes on an XSMALL warehouse. The optional AI step uses
 | Rule views | `AML_RULE_STRUCTURING`, `AML_RULE_RAPID`, `AML_RULE_FUNNEL`, `AML_RULE_GEO`, `AML_ALERT_QUEUE` |
 | Dynamic Table | `AML_ALERTS` (1-minute target lag; suspended at the end of Step 12) |
 | Row access policy and roles | `aml_region_policy`, `AML_INVESTIGATOR_EAST`, `AML_INVESTIGATOR_WEST`, `AML_MANAGER` |
+
+## Cost and time
+
+- **Time:** about 30 minutes to read and run top to bottom.
+- **Compute:** measured at about **0.04 credits per full run** on the XSMALL warehouse, which auto-suspends after 60 seconds idle. The optional AI step (Step 12) also uses a few thousand Cortex tokens for five summaries.
+- **Validation:** tested end to end on November 9, 2026 on an Enterprise Edition account (AWS), both as ACCOUNTADMIN and with the least-privilege role. Results matched, and cleanup removed every object.
+
+## Known limitations
+
+- **Planted cases, not detection performance.** The 12 alerts are the 12 cases planted in the synthetic data, and background activity was generated so it can't trip any rule. On real data these rules will produce false positives and need tuning.
+- **Dynamic Table refreshes are FULL.** `AML_ALERTS` combines window functions and unions that refresh in FULL mode, not incrementally. That's fine at this size; check the refresh mode before scaling up.
+- **AI output varies.** Step 12 summaries change between runs and models. The page shows one captured run, labeled illustrative. The model (`llama3.3-70b`) may not be available in every region without cross-region inference.
+- **Rules are simplified.** Thresholds, look-back windows and risk weights are illustrative, and the countries are coded rather than real jurisdictions.
 
 ## Customize with Cortex Code
 
@@ -99,3 +112,5 @@ Licensed under the [Apache License, Version 2.0](LICENSE). Prism.js, used for sy
 ## Disclaimer
 
 All customers, accounts, countries and transactions are synthetic. Customers are IDs only, and countries are coded (`CTRY_A`–`CTRY_L`), so no real jurisdiction is labeled high risk. The rules, thresholds and scores are illustrative and educational. They are not BSA/AML, FinCEN or any other regulatory guidance, and not a production transaction monitoring system. The repository contains no credentials, account identifiers or connection details.
+
+This is an illustrative example provided as-is. It is not an official Snowflake product and is not supported by Snowflake Support. It is not regulatory or compliance advice. Review and test before any production use.
