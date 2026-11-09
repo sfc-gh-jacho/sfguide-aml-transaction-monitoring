@@ -77,7 +77,7 @@ A full run takes a few minutes on an XSMALL warehouse. The optional AI step uses
 ## Known limitations
 
 - **Planted cases, not detection performance.** The 12 alerts are the 12 cases planted in the synthetic data, and background activity was generated so it can't trip any rule. On real data these rules will produce false positives and need tuning.
-- **Dynamic Table refreshes are FULL.** `AML_ALERTS` combines window functions and unions that refresh in FULL mode, not incrementally. That's fine at this size; check the refresh mode before scaling up.
+- **Dynamic Table refreshes are FULL.** `AML_ALERTS` refreshed in FULL mode, not incrementally, in the captured run, because the rules use self-joins and window functions. That's fine at this size; check the refresh mode before scaling up.
 - **AI output varies.** Step 12 summaries change between runs and models. The page shows one captured run, labeled illustrative. The model (`llama3.3-70b`) may not be available in every region without cross-region inference.
 - **Rules are simplified.** Thresholds, look-back windows and risk weights are illustrative, and the countries are coded rather than real jurisdictions.
 
