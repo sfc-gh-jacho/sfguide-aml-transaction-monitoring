@@ -13,7 +13,7 @@ A customer-facing, step-by-step guide to transparent, explainable anti-money-lau
 - **Region-based investigator access** with a mapping-table row access policy
 - **Optional Cortex `AI_COMPLETE`** case summaries that an investigator reviews
 
-**Live guide:** https://sfc-gh-jacho.github.io/sfguide-aml-transaction-monitoring/ · Part of [Snowflake Demo Packs](https://sfc-gh-jacho.github.io/Demo-Packs/)
+**Live guide:** https://sfc-gh-jacho.github.io/sfguide-aml-transaction-monitoring/
 
 The site is fully static and doesn't connect to any Snowflake account. Its result tables come from a real end-to-end run of the script on synthetic data.
 
